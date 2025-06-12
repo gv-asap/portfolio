@@ -3,35 +3,80 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Affichage PDF Responsive</title>
+    <title>PDF Viewer</title>
     <style>
-        .pdf-container {
-            position: relative;
-            width: 100%;
-            padding-bottom: 141.42%; /* 1 / √2 ≈ A4 ratio */
-            height: 0;
-        }
-
-        .pdf-container embed {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-        }
-
-        body {
+        * {
             margin: 0;
             padding: 0;
-            font-family: sans-serif;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: Arial, sans-serif;
+            background: #f5f5f5;
+        }
+        
+        .pdf-viewer {
+            width: 100%;
+            height: 100vh;
+            overflow: auto;
+        }
+        
+        embed, iframe {
+            width: 100%;
+            height: 100%;
+            border: none;
+        }
+        
+        .fallback {
+            display: none;
             text-align: center;
+            padding: 50px 20px;
+            background: white;
+            margin: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        
+        .fallback a {
+            display: inline-block;
+            margin-top: 20px;
+            padding: 12px 24px;
+            background: #007bff;
+            color: white;
+            text-decoration: none;
+            border-radius: 5px;
+        }
+        
+        .fallback a:hover {
+            background: #0056b3;
         }
     </style>
 </head>
 <body>
-    <h2>Mon PDF :</h2>
-    <div class="pdf-container">
+    <div class="pdf-viewer">
+        <!-- Méthode 1: embed (recommandée) -->
         <embed src="portfolio.pdf" type="application/pdf" />
+        
+        <!-- Méthode 2: iframe (si embed ne fonctionne pas) -->
+        <!-- <iframe src="portfolio.pdf"></iframe> -->
+        
+        <!-- Message de fallback -->
+        <div class="fallback" id="fallback">
+            <h2>Impossible d'afficher le PDF</h2>
+            <p>Votre navigateur ne peut pas afficher le PDF directement.</p>
+            <a href="portfolio.pdf" target="_blank">Télécharger le PDF</a>
+        </div>
     </div>
+
+    <script>
+        // Vérifier si le PDF peut être affiché
+        setTimeout(() => {
+            const embed = document.querySelector('embed');
+            if (!embed || embed.offsetHeight === 0) {
+                document.getElementById('fallback').style.display = 'block';
+            }
+        }, 1000);
+    </script>
 </body>
 </html>
